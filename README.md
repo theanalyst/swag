@@ -15,8 +15,11 @@ deploy_key="ssh-rsa <my-public-key>""
 
  and then launching terraform with 
  
- $ terraform plan -var-file=myvars.tfvars # Plan to see how things look like
- $ terraform apply -var-file=myvars.tfvars
+```sh
+
+$ terraform plan -var-file=myvars.tfvars # Plan to see how things look like
+$ terraform apply -var-file=myvars.tfvars
+```
  
 
 
