@@ -21,7 +21,18 @@ variable "osds_per_vm" {
 variable "osd_size" {
   default = 20
 }
+
 variable "deploy_key" {}
+
+variable "storage_subnet_cidr" {
+  default = "10.0.0.0/24"
+}
+
+variable "external_network_id" {}
+
+variable "external_subnet_cidr" {
+  default = "10.1.0.0/24"
+}
 
 variable "image_name" {
   default = "openSUSE-Leap-42.3-OpenStack.x86_64"
