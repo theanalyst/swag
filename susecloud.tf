@@ -44,13 +44,6 @@ resource "openstack_networking_router_interface_v2" "ext_int" {
   subnet_id = "${openstack_networking_subnet_v2.external_subnet.id}"
 }
 
-resource "openstack_networking_router_route_v2" "external_routes" {
-  depends_on = ["openstack_networking_router_interface_v2.ext_int"]
-  router_id = "${openstack_networking_router_v2.external_router.id}"
-  destination_cidr = "${var.external_subnet_cidr}"
-  next_hop = "${cidrhost(var.external_subnet_cidr, 1)}"
-}
-
 resource "openstack_compute_instance_v2" "admin" {
   name            = "${var.vm_name_prefix}-admin"
   key_pair        = "${openstack_compute_keypair_v2.deploy_key.name}"
@@ -59,14 +52,15 @@ resource "openstack_compute_instance_v2" "admin" {
   security_groups = ["default"]
 
   network {
+    uuid        = "${openstack_networking_network_v2.external_net.id}"
+    fixed_ip_v4 = "${cidrhost(var.external_subnet_cidr, 10)}"
+  }
+
+  network {
     uuid        = "${openstack_networking_network_v2.storage_net.id}"
     fixed_ip_v4 = "${cidrhost(var.storage_subnet_cidr, 10)}"
   }
 
-  network {
-    uuid        = "${openstack_networking_network_v2.external_net.id}"
-    fixed_ip_v4 = "${cidrhost(var.external_subnet_cidr, 10)}"
-  }
 }
 
 resource "openstack_compute_floatingip_associate_v2" "admin_fip" {
