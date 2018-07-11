@@ -99,3 +99,7 @@ resource "openstack_compute_volume_attach_v2" "stmon-osd-attach" {
   instance_id = "${element(openstack_compute_instance_v2.stmon.*.id, count.index / var.osds_per_vm)}"
   volume_id   = "${element(openstack_blockstorage_volume_v2.osds.*.id, count.index)}"
 }
+
+output "external_ip" {
+  value = "${openstack_networking_floatingip_v2.admin_fip.address}"
+}
