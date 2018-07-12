@@ -44,10 +44,17 @@ resource "openstack_networking_router_interface_v2" "ext_int" {
   subnet_id = "${openstack_networking_subnet_v2.external_subnet.id}"
 }
 
-data "template_file" "common_config" {
-  template = "${file("common-bootstrap.tpl")}"
-  vars {
-    ssh_keys = "${var.ssh_keys}"
+data "template_cloudinit_config" "common_config" {
+  part {
+    filename = "ssh.cfg"
+    content_type = "text/cloud-config"
+    content = "${file("ssh_keys.yml")}"
+  }
+
+  part {
+    filename = "networks.yml"
+    content_type = "text/cloud-config"
+    content = "${file("networks.yml")}"
   }
 }
 
@@ -68,7 +75,7 @@ resource "openstack_compute_instance_v2" "admin" {
     fixed_ip_v4 = "${cidrhost(var.storage_subnet_cidr, 10)}"
   }
 
-  user_data = "${data.template_file.common_config.rendered}"
+  user_data = "${data.template_cloudinit_config.common_config.rendered}"
 }
 
 resource "openstack_compute_floatingip_associate_v2" "admin_fip" {
@@ -101,7 +108,7 @@ resource "openstack_compute_instance_v2" "stmon" {
     fixed_ip_v4 = "${cidrhost(var.storage_subnet_cidr, count.index + 20)}"
   }
 
-  user_data = "${data.template_file.common_config.rendered}"
+  user_data = "${data.template_cloudinit_config.common_config.rendered}"
 }
 
 resource "openstack_compute_volume_attach_v2" "stmon-osd-attach" {
@@ -112,20 +119,6 @@ resource "openstack_compute_volume_attach_v2" "stmon-osd-attach" {
 
 output "external_ip" {
   value = "${openstack_networking_floatingip_v2.admin_fip.address}"
-}
-
-data "template_cloudinit_config" "st_config" {
-  part {
-    filename = "ssh.cfg"
-    content_type = "text/cloud-config"
-    content = "${file("ssh_keys.yml")}"
-  }
-
-  part {
-    filename = "networks.yml"
-    content_type = "text/cloud-config"
-    content = "${file("networks.yml")}"
-  }
 }
 
 resource "openstack_compute_instance_v2" "st" {
@@ -146,7 +139,7 @@ resource "openstack_compute_instance_v2" "st" {
     fixed_ip_v4 = "${cidrhost(var.storage_subnet_cidr, count.index + 100)}"
   }
 
-  user_data = "${data.template_cloudinit_config.st_config.rendered}"
+  user_data = "${data.template_cloudinit_config.common_config.rendered}"
 }
 
 resource "openstack_compute_volume_attach_v2" "st-osd-attach" {
