@@ -114,7 +114,7 @@ output "external_ip" {
 }
 
 resource "openstack_compute_instance_v2" "st" {
-  count           = "${var.mon_count}"
+  count           = "${var.st_count}"
   name            = "${var.vm_name_prefix}-stmon-${count.index}"
   key_pair        = "${openstack_compute_keypair_v2.deploy_key.name}"
   image_name      = "${var.image_name}"
@@ -123,7 +123,7 @@ resource "openstack_compute_instance_v2" "st" {
 
   network {
     uuid        = "${openstack_networking_network_v2.external_net.id}"
-    fixed_ip_v4 = "${cidrhost(var.external_subnet_cidr, 10)}"
+    fixed_ip_v4 = "${cidrhost(var.external_subnet_cidr, count.index + 100)}"
   }
 
   network {
