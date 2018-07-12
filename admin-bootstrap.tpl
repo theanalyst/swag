@@ -1,4 +1,4 @@
-sudo su
+#!/bin/bash
 cat /etc/sysconfig/network/ifcfg-eth1 < EOF
 BOOTPROTO='dhcp'
 BROADCAST=''
@@ -12,4 +12,4 @@ REMOTE_IPADDR=''
 STARTMODE='auto'
 EOF
 
-wicked ifup eth1
+sudo wicked ifup eth1
