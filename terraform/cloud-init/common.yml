@@ -14,3 +14,9 @@ write_files:
 
 runcmd:
   - [ sudo, wicked, ifup, eth1 ]
+
+# Base package install
+package_update: true
+packages:
+  - ceph-base
+  - ceph-common
