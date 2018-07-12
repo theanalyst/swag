@@ -52,9 +52,9 @@ data "template_cloudinit_config" "common_config" {
   }
 
   part {
-    filename = "networks.yml"
+    filename = "common.yml"
     content_type = "text/cloud-config"
-    content = "${file("${path.module}/cloud-init/networks.yml")}"
+    content = "${file("${path.module}/cloud-init/common.yml")}"
   }
 }
 
@@ -99,9 +99,9 @@ data "template_cloudinit_config" "mon_config" {
   }
 
   part {
-    filename = "networks.yml"
+    filename = "common.yml"
     content_type = "text/cloud-config"
-    content = "${file("${path.module}/cloud-init/networks.yml")}"
+    content = "${file("${path.module}/cloud-init/common.yml")}"
   }
 
   part {
