@@ -17,4 +17,4 @@ EOF
 sudo wicked ifup eth1
 
 # Setting up deploy keys
-echo ${ssh_keys} >> ~/.authorized_keys
+echo "${ssh_keys}" >> ~/.ssh/authorized_keys
