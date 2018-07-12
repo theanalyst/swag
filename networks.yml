@@ -1,0 +1,17 @@
+#cloud-config
+write_files:
+  - path: /etc/sysconfig/network/ifcfg-eth1
+  - content: |
+      BOOTPROTO='dhcp'
+      BROADCAST=''
+      ETHTOOL_OPTIONS=''
+      IPADDR=''
+      MTU=''
+      NAME='Ethernet Card 2'
+      NETMASK=''
+      NETWORK=''
+      REMOTE_IPADDR=''
+      STARTMODE='auto'
+
+runcmd:
+  - [ sudo, wicked, ifup, eth1 ]

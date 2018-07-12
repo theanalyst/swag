@@ -114,6 +114,20 @@ output "external_ip" {
   value = "${openstack_networking_floatingip_v2.admin_fip.address}"
 }
 
+data "template_cloudinit_config" "st_config" {
+  part {
+    filename = "ssh.cfg"
+    content_type = "text/part-handler"
+    content = "${file("ssh_keys.yml")}"
+  }
+
+  part {
+    filename = "networks.yml"
+    content_type = "text/cloud-config"
+    content = "${file("networks.yml")}"
+  }
+}
+
 resource "openstack_compute_instance_v2" "st" {
   count           = "${var.st_count}"
   name            = "${var.vm_name_prefix}-st-${count.index}"
@@ -132,7 +146,7 @@ resource "openstack_compute_instance_v2" "st" {
     fixed_ip_v4 = "${cidrhost(var.storage_subnet_cidr, count.index + 100)}"
   }
 
-  user_data = "${data.template_file.common_config.rendered}"
+  user_data = "${data.template_cloudinit_config.st_config.rendered}"
 }
 
 resource "openstack_compute_volume_attach_v2" "st-osd-attach" {
