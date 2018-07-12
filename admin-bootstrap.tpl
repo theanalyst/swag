@@ -1,5 +1,5 @@
 #!/bin/bash
-cat /etc/sysconfig/network/ifcfg-eth1 < EOF
+cat > /etc/sysconfig/network/ifcfg-eth1 << EOF
 BOOTPROTO='dhcp'
 BROADCAST=''
 ETHTOOL_OPTIONS=''
