@@ -48,13 +48,13 @@ data "template_cloudinit_config" "common_config" {
   part {
     filename = "ssh.cfg"
     content_type = "text/cloud-config"
-    content = "${file("ssh_keys.yml")}"
+    content = "${file("${path.module}/cloud-init/ssh_keys.yml")}"
   }
 
   part {
     filename = "networks.yml"
     content_type = "text/cloud-config"
-    content = "${file("networks.yml")}"
+    content = "${file("${path.module}/cloud-init/networks.yml")}"
   }
 }
 
@@ -90,6 +90,28 @@ resource "openstack_blockstorage_volume_v2" "osds" {
   name = "osd.${count.index}"
 }
 
+#TODO figure out if we can avoid repeating common stuff again
+data "template_cloudinit_config" "mon_config" {
+  part {
+    filename = "ssh.cfg"
+    content_type = "text/cloud-config"
+    content = "${file("${path.module}/cloud-init/ssh_keys.yml")}"
+  }
+
+  part {
+    filename = "networks.yml"
+    content_type = "text/cloud-config"
+    content = "${file("${path.module}/cloud-init/networks.yml")}"
+  }
+
+  part {
+    filename = "mon.yml"
+    content_type = "text/cloud-config"
+    content = "${file("${path.module}/cloud-init/mon.yml")}"
+  }
+}
+
+
 resource "openstack_compute_instance_v2" "stmon" {
   count           = "${var.mon_count}"
   name            = "${var.vm_name_prefix}-stmon-${count.index}"
@@ -108,7 +130,7 @@ resource "openstack_compute_instance_v2" "stmon" {
     fixed_ip_v4 = "${cidrhost(var.storage_subnet_cidr, count.index + 20)}"
   }
 
-  user_data = "${data.template_cloudinit_config.common_config.rendered}"
+  user_data = "${data.template_cloudinit_config.mon_config.rendered}"
 }
 
 resource "openstack_compute_volume_attach_v2" "stmon-osd-attach" {

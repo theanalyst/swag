@@ -1,0 +1,6 @@
+package_update: true
+packages:
+  - ceph-mon
+  - ceph-mgr
+  - ceph-osd
+  - ceph-radosgw
