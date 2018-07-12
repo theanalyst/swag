@@ -1,10 +1,16 @@
 # README
 
-Terraform swag to bring up a tiny ceph cluster 
+Terraform swag to bring up a tiny ceph cluster for the
+
+  **Storage WAr Games**
 
 ## First steps
 
-From your openstack cloud provider, download your openrc file and source in your env. Then create a file called myvars.tfvars for eg 
+These steps assume you will be performing them from inside the `terraform`
+directory in the repository's root directory.
+
+From your openstack cloud provider, download your openrc file and source in
+your env. Then create a file called myvars.tfvars for eg 
 
 ```
 image_name=myimage
