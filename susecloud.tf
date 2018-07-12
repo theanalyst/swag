@@ -44,6 +44,10 @@ resource "openstack_networking_router_interface_v2" "ext_int" {
   subnet_id = "${openstack_networking_subnet_v2.external_subnet.id}"
 }
 
+data "template_file" "admin_config" {
+  template = "${file("admin-bootstrap.tpl")}"
+}
+
 resource "openstack_compute_instance_v2" "admin" {
   name            = "${var.vm_name_prefix}-admin"
   key_pair        = "${openstack_compute_keypair_v2.deploy_key.name}"
@@ -61,6 +65,7 @@ resource "openstack_compute_instance_v2" "admin" {
     fixed_ip_v4 = "${cidrhost(var.storage_subnet_cidr, 10)}"
   }
 
+  user_data = "${data.template_file.admin_config.rendered}"
 }
 
 resource "openstack_compute_floatingip_associate_v2" "admin_fip" {
