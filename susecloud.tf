@@ -92,7 +92,7 @@ resource "openstack_compute_instance_v2" "stmon" {
 
   network {
     uuid        = "${openstack_networking_network_v2.external_net.id}"
-    fixed_ip_v4 = "${cidrhost(var.external_subnet_cidr, 10)}"
+    fixed_ip_v4 = "${cidrhost(var.external_subnet_cidr, count.index + 20)}"
   }
 
   network {
