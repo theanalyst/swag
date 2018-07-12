@@ -14,6 +14,10 @@ variable "mon_count" {
   default = 3
 }
 
+variable "st_count" {
+  default = 2
+}
+
 variable "osds_per_vm" {
   default = 4
 }
@@ -36,4 +40,8 @@ variable "external_subnet_cidr" {
 
 variable "image_name" {
   default = "openSUSE-Leap-42.3-OpenStack.x86_64"
+}
+
+variable "ssh_keys" {
+  default = ""
 }
