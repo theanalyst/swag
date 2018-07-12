@@ -117,7 +117,7 @@ output "external_ip" {
 data "template_cloudinit_config" "st_config" {
   part {
     filename = "ssh.cfg"
-    content_type = "text/part-handler"
+    content_type = "text/cloud-config"
     content = "${file("ssh_keys.yml")}"
   }
 

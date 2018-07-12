@@ -1,6 +1,4 @@
-#cloud-config
 write_files:
-  - path: /etc/sysconfig/network/ifcfg-eth1
   - content: |
       BOOTPROTO='dhcp'
       BROADCAST=''
@@ -12,6 +10,7 @@ write_files:
       NETWORK=''
       REMOTE_IPADDR=''
       STARTMODE='auto'
+    path: /etc/sysconfig/network/ifcfg-eth1
 
 runcmd:
   - [ sudo, wicked, ifup, eth1 ]
